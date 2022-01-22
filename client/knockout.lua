@@ -1,10 +1,10 @@
-Laststand = Laststand or {}
-Laststand.ReviveInterval = 360
-Laststand.MinimumRevive = 300
-InLaststand = false
-LaststandTime = 0
-lastStandDict = "combat@damage@writhe"
-lastStandAnim = "writhe_loop"
+KnockedOut = KnockedOut or {}
+KnockedOut.ReviveInterval = 90
+KnockedOut.MinimumRevive = 20
+InKnockedOut = false
+KnockedOutTime = 0
+KnockedOutDict = "combat@damage@writhe"
+KnockedOutAnim = "writhe_loop"
 isEscorted = false
 local isEscorting = false
 
@@ -38,7 +38,7 @@ local function LoadAnimation(dict)
     end
 end
 
-function SetLaststand(bool, spawn)
+function SetKnockedOut(bool, spawn)
     local ped = PlayerPedId()
     if bool then
         Wait(1000)
@@ -51,7 +51,7 @@ function SetLaststand(bool, spawn)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "demo", 0.1)
 
-        LaststandTime = Laststand.ReviveInterval
+        KnockedOutTime = KnockedOut.ReviveInterval
 
         NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
         SetEntityHealth(ped, 150)
@@ -61,27 +61,27 @@ function SetLaststand(bool, spawn)
             LoadAnimation("veh@low@front_ps@idle_duck")
             TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 8.0, -1, 1, -1, false, false, false)
         else
-            LoadAnimation(lastStandDict)
-            TaskPlayAnim(ped, lastStandDict, lastStandAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
+            LoadAnimation(KnockedOutDict)
+            TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
         end
 
-        InLaststand = true
+        InKnockedOut = true
 
 	TriggerServerEvent('hospital:server:ambulanceAlert', 'Civilian Down')
 
         CreateThread(function()
-            while InLaststand do
+            while InKnockedOut do
                 ped = PlayerPedId()
                 player = PlayerId()
-                if LaststandTime - 1 > Laststand.MinimumRevive then
-                    LaststandTime = LaststandTime - 1
-                    Config.DeathTime = LaststandTime
-                elseif LaststandTime - 1 <= Laststand.MinimumRevive and LaststandTime - 1 ~= 0 then
-                    LaststandTime = LaststandTime - 1
-                    Config.DeathTime = LaststandTime
-                elseif LaststandTime - 1 <= 0 then
-                    QBCore.Functions.Notify("You have bled out..", "error")
-                    SetLaststand(false)
+                if KnockedOutTime - 1 > KnockedOut.MinimumRevive then
+                    KnockedOutTime = KnockedOutTime - 1
+                    Config.DeathTime = KnockedOutTime
+                elseif KnockedOutTime - 1 <= KnockedOut.MinimumRevive and KnockedOutTime - 1 ~= 0 then
+                    KnockedOutTime = KnockedOutTime - 1
+                    Config.DeathTime = KnockedOutTime
+                elseif KnockedOutTime - 1 <= 0 then
+                    QBCore.Functions.Notify("You have woken up", "error")
+                    SetKnockedOut(false)
                     local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)
                     local killer = GetPedSourceOfDeath(ped)
 
@@ -98,20 +98,20 @@ function SetLaststand(bool, spawn)
                         weaponLabel = weaponItem.label
                         weaponName = weaponItem.name
                     end
-                    TriggerServerEvent("qb-log:server:CreateLog", "death", GetPlayerName(player) .. " ("..GetPlayerServerId(player)..") is dead", "red", "**".. killerName .. "** has killed  ".. GetPlayerName(player) .." with a **".. weaponLabel .. "** (" .. weaponName .. ")")
-                    deathTime = 0
-                    OnDeath()
-                    DeathTimer()
+                    --TriggerServerEvent("qb-log:server:CreateLog", "death", GetPlayerName(player) .. " ("..GetPlayerServerId(player)..") is dead", "red", "**".. killerName .. "** has killed  ".. GetPlayerName(player) .." with a **".. weaponLabel .. "** (" .. weaponName .. ")")
+                    --deathTime = 0
+                    --OnDeath()
+                    --DeathTimer()
                 end
                 Wait(1000)
             end
         end)
     else
-        TaskPlayAnim(ped, lastStandDict, "exit", 1.0, 8.0, -1, 1, -1, false, false, false)
-        InLaststand = false
-        LaststandTime = 0
+        TaskPlayAnim(ped, KnockedOutDict, "exit", 1.0, 8.0, -1, 1, -1, false, false, false)
+        InKnockedOut = false
+        KnockedOutTime = 0
     end
-    TriggerServerEvent("hospital:server:SetLaststandStatus", bool)
+    TriggerServerEvent("hospital:server:SetKnockedOutStatus", bool)
 end
 
 -- Events
@@ -137,8 +137,8 @@ RegisterNetEvent('hospital:client:UseFirstAid', function()
 end)
 
 RegisterNetEvent('hospital:client:CanHelp', function(helperId)
-    if InLaststand then
-        if LaststandTime <= 300 then
+    if InKnockedOut then
+        if KnockedOutTime <= 300 then
             TriggerServerEvent('hospital:server:CanHelp', helperId, true)
         else
             TriggerServerEvent('hospital:server:CanHelp', helperId, false)

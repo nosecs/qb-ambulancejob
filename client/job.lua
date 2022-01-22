@@ -50,13 +50,10 @@ end
 function TakeOutVehicle(vehicleInfo)
     local coords = Config.Locations["vehicle"][currentGarage]
     QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
-        SetVehicleNumberPlateText(veh, Lang:t('info.amb_plate')..tostring(math.random(1000, 9999)))
+        SetVehicleNumberPlateText(veh, "AMBU"..tostring(math.random(1000, 9999)))
         SetEntityHeading(veh, coords.w)
         exports['LegacyFuel']:SetFuel(veh, 100.0)
         TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-        if Config.VehicleSettings[vehicleInfo] ~= nil then
-            QBCore.Shared.SetDefaultVehicleExtras(veh, Config.VehicleSettings[vehicleInfo].extras)
-        end
         TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
         SetVehicleEngineOn(veh, true, true)
     end, coords, true)
@@ -65,7 +62,7 @@ end
 function MenuGarage()
     local vehicleMenu = {
         {
-            header = Lang:t('menu.amb_vehicles'),
+            header = "Ambulance Vehicles",
             isMenuHeader = true
         }
     }
@@ -84,7 +81,7 @@ function MenuGarage()
         }
     end
     vehicleMenu[#vehicleMenu+1] = {
-        header = Lang:t('menu.close'),
+        header = "⬅ Close Menu",
         txt = "",
         params = {
             event = "qb-menu:client:closeMenu"
@@ -123,16 +120,19 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
         QBCore.Functions.GetPlayerData(function(PlayerData)
             PlayerJob = PlayerData.job
             onDuty = PlayerData.job.onduty
-            SetPedArmour(PlayerPedId(), PlayerData.metadata["armor"])
-            if (not PlayerData.metadata["inlaststand"] and PlayerData.metadata["isdead"]) then
+            SetPedArmour(ped, PlayerData.metadata["armor"])
+            if (not PlayerData.metadata["inlaststand"] and PlayerData.metadata["isdead"] and not PlayerData.metadata["inknockedout"]) then
                 deathTime = Laststand.ReviveInterval
                 OnDeath()
                 DeathTimer()
-            elseif (PlayerData.metadata["inlaststand"] and not PlayerData.metadata["isdead"]) then
+            elseif (PlayerData.metadata["inlaststand"] and not PlayerData.metadata["isdead"] and not PlayerData.metadata["inknockedout"]) then
                 SetLaststand(true, true)
+            elseif (not PlayerData.metadata["inlaststand"] and not PlayerData.metadata["isdead"] and PlayerData.metadata["inknockedout"]) then
+                SetKnockedOut(true, true)
             else
                 TriggerServerEvent("hospital:server:SetDeathStatus", false)
                 TriggerServerEvent("hospital:server:SetLaststandStatus", false)
+                TriggerServerEvent("hospital:server:SetKnockedOutStatus", false)
             end
         end)
     end)
@@ -158,17 +158,17 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
                             TriggerEvent('chat:addMessage', {
                                 color = { 255, 0, 0},
                                 multiline = false,
-                                args = {Lang:t('info.status'), WeaponDamageList[v]}
+                                args = {"Status Check", WeaponDamageList[v]}
                             })
                         end
                     elseif result["BLEED"] > 0 then
                         TriggerEvent('chat:addMessage', {
                             color = { 255, 0, 0},
                             multiline = false,
-                            args = {Lang:t('info.status'), Lang:t('info.is_status', {status = Config.BleedingStates[v].label})}
+                            args = {"Status Check", "Is "..Config.BleedingStates[v].label}
                         })
                     else
-                        QBCore.Functions.Notify(Lang:t('success.healthy_player'), 'success')
+                        QBCore.Functions.Notify('Player Is Healthy', 'success')
                     end
                 end
                 isStatusChecking = true
@@ -176,7 +176,7 @@ RegisterNetEvent('hospital:client:CheckStatus', function()
             end
         end, playerId)
     else
-        QBCore.Functions.Notify(Lang:t('error.no_player'), 'error')
+        QBCore.Functions.Notify('No Player Nearby', 'error')
     end
 end)
 
@@ -187,7 +187,7 @@ RegisterNetEvent('hospital:client:RevivePlayer', function()
             if player ~= -1 and distance < 5.0 then
                 local playerId = GetPlayerServerId(player)
                 isHealingPerson = true
-                QBCore.Functions.Progressbar("hospital_revive", Lang:t('progress.revive'), 5000, false, true, {
+                QBCore.Functions.Progressbar("hospital_revive", "Reviving person..", 5000, false, true, {
                     disableMovement = false,
                     disableCarMovement = false,
                     disableMouse = false,
@@ -199,18 +199,18 @@ RegisterNetEvent('hospital:client:RevivePlayer', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    QBCore.Functions.Notify(Lang:t('success.revived'), 'success')
+                    QBCore.Functions.Notify("You revived the person!")
                     TriggerServerEvent("hospital:server:RevivePlayer", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    QBCore.Functions.Notify(Lang:t('error.cancled'), "error")
+                    QBCore.Functions.Notify("Failed!", "error")
                 end)
             else
-                QBCore.Functions.Notify(Lang:t('error.no_player'), "error")
+                QBCore.Functions.Notify("No Player Nearby", "error")
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.no_firstaid'), "error")
+            QBCore.Functions.Notify("You Need A First Aid Kit", "error")
         end
     end, 'firstaid')
 end)
@@ -222,7 +222,7 @@ RegisterNetEvent('hospital:client:TreatWounds', function()
             if player ~= -1 and distance < 5.0 then
                 local playerId = GetPlayerServerId(player)
                 isHealingPerson = true
-                QBCore.Functions.Progressbar("hospital_healwounds", Lang:t('progress.healing'), 5000, false, true, {
+                QBCore.Functions.Progressbar("hospital_healwounds", "Healing wounds..", 5000, false, true, {
                     disableMovement = false,
                     disableCarMovement = false,
                     disableMouse = false,
@@ -234,51 +234,23 @@ RegisterNetEvent('hospital:client:TreatWounds', function()
                 }, {}, {}, function() -- Done
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    QBCore.Functions.Notify(Lang:t('success.helped_player'), 'success')
+                    QBCore.Functions.Notify("You helped the person!")
                     TriggerServerEvent("hospital:server:TreatWounds", playerId)
                 end, function() -- Cancel
                     isHealingPerson = false
                     StopAnimTask(PlayerPedId(), healAnimDict, "exit", 1.0)
-                    QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+                    QBCore.Functions.Notify("Failed!", "error")
                 end)
             else
-                QBCore.Functions.Notify(Lang:t('error.no_player'), "error")
+                QBCore.Functions.Notify("No Player Nearby", "error")
             end
         else
-            QBCore.Functions.Notify(Lang:t('error.no_bandage'), "error")
+            QBCore.Functions.Notify("You Need A Bandage", "error")
         end
     end, 'bandage')
 end)
 
 -- Threads
-
--- Personal Stash
-CreateThread(function()
-    Wait(1000)
-    while true do
-        local sleep = 2000
-        if LocalPlayer.state.isLoggedIn and PlayerJob.name == "ambulance" then
-            local pos = GetEntityCoords(PlayerPedId())
-            for k, v in pairs(Config.Locations["stash"]) do
-                if #(pos - v) < 4.5 then
-                    if onDuty then
-                        sleep = 5
-                        if #(pos - v) < 1.5 then
-                            DrawText3D(v.x, v.y, v.z, Lang:t('text.pstash_button'))
-                            if IsControlJustReleased(0, 38) then
-                                TriggerServerEvent("inventory:server:OpenInventory", "stash", "ambulancestash_"..QBCore.Functions.GetPlayerData().citizenid)
-                                TriggerEvent("inventory:client:SetCurrentStash", "ambulancestash_"..QBCore.Functions.GetPlayerData().citizenid)
-                            end
-                        elseif #(pos - v) < 2.5 then
-                            DrawText3D(v.x, v.y, v.z, Lang:t('text.pstash'))
-                        end
-                    end
-                end
-            end
-        end
-        Wait(sleep)
-    end
-end)
 
 CreateThread(function()
     while true do
@@ -302,7 +274,7 @@ end)
 CreateThread(function()
     while true do
         sleep = 1000
-        if LocalPlayer.state.isLoggedIn then
+        if LocalPlayer.state['isLoggedIn'] then
             local ped = PlayerPedId()
             local pos = GetEntityCoords(ped)
             if PlayerJob.name =="ambulance" then
@@ -312,9 +284,9 @@ CreateThread(function()
                         sleep = 0
                         if dist < 1.5 then
                             if onDuty then
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.offduty_button'))
+                                DrawText3D(v.x, v.y, v.z, "~r~E~w~ - Go Off Duty")
                             else
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.onduty_button'))
+                                DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Go On Duty")
                             end
                             if IsControlJustReleased(0, 38) then
                                 onDuty = not onDuty
@@ -322,7 +294,7 @@ CreateThread(function()
                                 TriggerServerEvent("police:server:UpdateBlips")
                             end
                         elseif dist < 4.5 then
-                            DrawText3D(v.x, v.y, v.z, Lang:t('text.duty'))
+                            DrawText3D(v.x, v.y, v.z, "On/Off Duty")
                         end
                     end
                 end
@@ -333,12 +305,12 @@ CreateThread(function()
                         if onDuty then
                             if dist < 1.5 then
                                 sleep = 0
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.armory_button'))
+                                DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Armory")
                                 if IsControlJustReleased(0, 38) then
                                     TriggerServerEvent("inventory:server:OpenInventory", "shop", "hospital", Config.Items)
                                 end
                             elseif dist < 2.5 then
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.armory'))
+                                DrawText3D(v.x, v.y, v.z, "Armory")
                             end
                         end
                     end
@@ -351,9 +323,9 @@ CreateThread(function()
                         DrawMarker(2, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
                         if dist < 1.5 then
                             if IsPedInAnyVehicle(ped, false) then
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.storeveh_button'))
+                                DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Store vehicle")
                             else
-                                DrawText3D(v.x, v.y, v.z, Lang:t('text.veh_button'))
+                                DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Vehicles")
                             end
                             if IsControlJustReleased(0, 38) then
                                 if IsPedInAnyVehicle(ped, false) then
@@ -375,9 +347,9 @@ CreateThread(function()
                             DrawMarker(2, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
                             if dist < 1.5 then
                                 if IsPedInAnyVehicle(ped, false) then
-                                    DrawText3D(v.x, v.y, v.z, Lang:t('text.storeheli_button'))
+                                    DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Store helicopter")
                                 else
-                                    DrawText3D(v.x, v.y, v.z, Lang:t('text.heli_button'))
+                                    DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Take a helicopter")
                                 end
                                 if IsControlJustReleased(0, 38) then
                                     if IsPedInAnyVehicle(ped, false) then
@@ -385,7 +357,7 @@ CreateThread(function()
                                     else
                                         local coords = Config.Locations["helicopter"][k]
                                         QBCore.Functions.SpawnVehicle(Config.Helicopter, function(veh)
-                                            SetVehicleNumberPlateText(veh, Lang:t('info.heli_plate')..tostring(math.random(1000, 9999)))
+                                            SetVehicleNumberPlateText(veh, "LIFE"..tostring(math.random(1000, 9999)))
                                             SetEntityHeading(veh, coords.w)
                                             SetVehicleLivery(veh, 1) -- Ambulance Livery
                                             exports['LegacyFuel']:SetFuel(veh, 100.0)
@@ -407,7 +379,7 @@ CreateThread(function()
                 local dist = #(pos - v)
                 if dist < 1.5 then
                     sleep = 5
-                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_roof'))
+                    DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Take the elevator to the roof")
                     if IsControlJustReleased(0, 38) then
                         DoScreenFadeOut(500)
                         while not IsScreenFadedOut() do
@@ -431,7 +403,7 @@ CreateThread(function()
                 local dist = #(pos - vector3(v.x, v.y, v.z))
                 if dist < 1.5 then
                     sleep = 5
-                    DrawText3D(v.x, v.y, v.z, Lang:t('text.elevator_main'))
+                    DrawText3D(v.x, v.y, v.z, "~g~E~w~ - Take the elevator down")
                     if IsControlJustReleased(0, 38) then
                         DoScreenFadeOut(500)
                         while not IsScreenFadedOut() do

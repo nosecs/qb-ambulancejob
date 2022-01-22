@@ -34,39 +34,9 @@ end
 
 -- Events
 
-RegisterNetEvent('hospital:client:UseIfaks', function()
-    local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.ifaks'), 3000, false, true, {
-        disableMovement = false,
-        disableCarMovement = false,
-		disableMouse = false,
-		disableCombat = true,
-    }, {
-		animDict = "mp_suicide",
-		anim = "pill",
-		flags = 49,
-    }, {}, {}, function() -- Done
-        StopAnimTask(ped, "mp_suicide", "pill", 1.0)
-        TriggerServerEvent("QBCore:Server:RemoveItem", "ifaks", 1)
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["ifaks"], "remove")
-        TriggerServerEvent('hud:server:RelieveStress', math.random(12, 24))
-        SetEntityHealth(ped, GetEntityHealth(ped) + 10)
-        onPainKillers = true
-        if painkillerAmount < 3 then
-            painkillerAmount = painkillerAmount + 1
-        end
-        if math.random(1, 100) < 50 then
-            RemoveBleed(1)
-        end
-    end, function() -- Cancel
-        StopAnimTask(ped, "mp_suicide", "pill", 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
-    end)
-end)
-
 RegisterNetEvent('hospital:client:UseBandage', function()
     local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.bandage'), 4000, false, true, {
+    QBCore.Functions.Progressbar("use_bandage", "Using bandage..", 4000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
 		disableMouse = false,
@@ -88,13 +58,13 @@ RegisterNetEvent('hospital:client:UseBandage', function()
         end
     end, function() -- Cancel
         StopAnimTask(ped, "anim@amb@business@weed@weed_inspecting_high_dry@", "weed_inspecting_high_base_inspector", 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        QBCore.Functions.Notify("Failed", "error")
     end)
 end)
 
 RegisterNetEvent('hospital:client:UsePainkillers', function()
     local ped = PlayerPedId()
-    QBCore.Functions.Progressbar("use_bandage", Lang:t('progress.painkillers'), 3000, false, true, {
+    QBCore.Functions.Progressbar("use_bandage", "Taking painkillers", 3000, false, true, {
         disableMovement = false,
         disableCarMovement = false,
 		disableMouse = false,
@@ -113,7 +83,58 @@ RegisterNetEvent('hospital:client:UsePainkillers', function()
         end
     end, function() -- Cancel
         StopAnimTask(ped, "mp_suicide", "pill", 1.0)
-        QBCore.Functions.Notify(Lang:t('error.canceled'), "error")
+        QBCore.Functions.Notify("Failed", "error")
+    end)
+end)
+
+RegisterNetEvent('hospital:client:UseIfak', function()
+    local ped = PlayerPedId()
+    QBCore.Functions.Progressbar("use_bandage", "Using IFAK..", 10000, false, true, {
+        disableMovement = false,
+        disableCarMovement = false,
+		disableMouse = false,
+		disableCombat = true,
+    }, {
+		animDict = "anim@amb@business@weed@weed_inspecting_high_dry@",
+		anim = "weed_inspecting_high_base_inspector",
+		flags = 49,
+    }, {}, {}, function() -- Done
+        StopAnimTask(ped, "anim@amb@business@weed@weed_inspecting_high_dry@", "weed_inspecting_high_base_inspector", 1.0)
+        TriggerServerEvent("QBCore:Server:RemoveItem", "ifaks", 1)
+        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["ifaks"], "remove")
+        SetEntityHealth(ped, GetEntityHealth(ped) + 100)
+        RemoveBleed(1)
+		ResetPartial()
+    end, function() -- Cancel
+        StopAnimTask(ped, "anim@amb@business@weed@weed_inspecting_high_dry@", "weed_inspecting_high_base_inspector", 1.0)
+        QBCore.Functions.Notify("Failed", "error")
+    end)
+end)
+
+RegisterNetEvent('hospital:client:UseMorphine', function()
+    local ped = PlayerPedId()
+    QBCore.Functions.Progressbar("use_bandage", "Using Morphine..", 5000, false, true, {
+        disableMovement = false,
+        disableCarMovement = false,
+		disableMouse = false,
+		disableCombat = true,
+    }, {
+		animDict = "anim@amb@business@weed@weed_inspecting_high_dry@",
+		anim = "weed_inspecting_high_base_inspector",
+		flags = 49,
+    }, {}, {}, function() -- Done
+        StopAnimTask(ped, "anim@amb@business@weed@weed_inspecting_high_dry@", "weed_inspecting_high_base_inspector", 1.0)
+        TriggerServerEvent("QBCore:Server:RemoveItem", "morphine", 1)
+        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["morphine"], "remove")
+        SetEntityHealth(ped, GetEntityHealth(ped) + 10)
+		AnimpostfxPlay("DrugsMichaelAliensFight", 120000, false)
+		RequestAnimSet("MOVE_M@DRUNK@SLIGHTLYDRUNK")
+		SetPedMovementClipset(ped, "MOVE_M@DRUNK@SLIGHTLYDRUNK", 1 )
+		Wait(120000)
+		TriggerServerEvent('qb-walkstyles:server:walkstyles', 'get')
+    end, function() -- Cancel
+        StopAnimTask(ped, "anim@amb@business@weed@weed_inspecting_high_dry@", "weed_inspecting_high_base_inspector", 1.0)
+        QBCore.Functions.Notify("Failed", "error")
     end)
 end)
 
