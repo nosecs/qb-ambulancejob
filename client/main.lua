@@ -87,7 +87,7 @@ local function IsDamagingEvent(damageDone, weapon)
 end
 
 local function DoLimbAlert()
-    if not isDead and not InLaststand then
+    if not isDead and not InLaststand and not InKnockedOut then
         if #injured > 0 then
             local limbDamageMsg = ''
             if #injured <= Config.AlertShowInfo then
@@ -408,7 +408,7 @@ end
 local function CheckDamage(ped, bone, weapon, damageDone)
     if weapon == nil then return end
 
-    if Config.Bones[bone] and not isDead and not InLaststand then
+    if Config.Bones[bone] and not isDead and not InLaststand and not InKnockedOut then
         ApplyImmediateEffects(ped, bone, weapon, damageDone)
 
         if not BodyParts[Config.Bones[bone]].isDamaged then
@@ -441,7 +441,7 @@ local function CheckDamage(ped, bone, weapon, damageDone)
 end
 
 local function ProcessDamage(ped)
-    if not isDead and not InLaststand and not onPainKillers then
+    if not isDead and not InLaststand and not onPainKillers and not InKnockedOut then
         for k, v in pairs(injured) do
             if (v.part == 'LLEG' and v.severity > 1) or (v.part == 'RLEG' and v.severity > 1) or (v.part == 'LFOOT' and v.severity > 2) or (v.part == 'RFOOT' and v.severity > 2) then
                 if legCount >= Config.LegInjuryTimer then
@@ -577,12 +577,13 @@ end)
 RegisterNetEvent('hospital:client:Revive', function()
     local player = PlayerPedId()
 
-    if isDead or InLaststand then
+    if isDead or InLaststand or InKnockedOut then
         local pos = GetEntityCoords(player, true)
         NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z, GetEntityHeading(player), true, false)
         isDead = false
         SetEntityInvincible(player, false)
         SetLaststand(false)
+        SetKnockedOut(false)
     end
 
     if isInHospitalBed then
@@ -602,8 +603,11 @@ RegisterNetEvent('hospital:client:Revive', function()
     TriggerServerEvent('hud:server:RelieveStress', 100)
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent("hospital:server:SetLaststandStatus", false)
+    TriggerServerEvent("hospital:server:SetKnockedOutStatus", false)
     emsNotified = false
     QBCore.Functions.Notify(Lang:t('info.healthy'))
+
+    TriggerServerEvent('qb-walkstyles:server:walkstyles', 'get') -- CODE FOR QB-WALKINGSTYLES
 end)
 
 RegisterNetEvent('hospital:client:SetPain', function()
@@ -707,6 +711,7 @@ RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
     local ped = PlayerPedId()
     TriggerServerEvent("hospital:server:SetDeathStatus", false)
     TriggerServerEvent('hospital:server:SetLaststandStatus', false)
+    TriggerServerEvent('hospital:server:SetKnockedOutStatus', false)
     TriggerServerEvent("hospital:server:SetArmor", GetPedArmour(ped))
     if bedOccupying then
         TriggerServerEvent("hospital:server:LeaveBed", bedOccupying)

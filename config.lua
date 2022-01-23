@@ -3,6 +3,20 @@ Config = {}
 Config.MinimalDoctors = 2
 Config.WipeInventoryOnRespawn = true
 
+Config.KnockoutWeapons = {
+    ["Crowbar"]--[[Weapon name. Can be whatever its just a refrence]] = GetHashKey("weapon_crowbar")--[[weapon spawn name]],
+    ["Baseball Bat"] = GetHashKey("weapon_bat"),
+    ["Broken Bottle"] = GetHashKey("weapon_bottle"),
+    ["Fist"] = GetHashKey("weapon_unarmed"),
+    ["Flashlight"] = GetHashKey("weapon_flashlight"),
+    ["Golf Club"] = GetHashKey("weapon_golfclub"),
+    ["Hammer"] = GetHashKey("weapon_hammer"),
+    ["Brass Knuckles"] = GetHashKey("weapon_knuckle"),
+    ["Nightstick"] = GetHashKey("weapon_nightstick"),
+    ["Pipe Wrench"] = GetHashKey("weapon_wrench"),
+    ["Pool Cue"] = GetHashKey("weapon_poolcue"),
+}
+
 Config.Locations = {
     ["checking"] = {
 	    [1] = vector3(308.19, -595.35, 43.29),

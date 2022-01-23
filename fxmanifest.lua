@@ -14,6 +14,7 @@ client_scripts {
 	'client/main.lua',
 	'client/wounding.lua',
 	'client/laststand.lua',
+	'client/knockout.lua',
 	'client/job.lua',
 	'client/dead.lua',
 }

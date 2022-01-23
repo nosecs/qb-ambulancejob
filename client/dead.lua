@@ -102,10 +102,25 @@ CreateThread(function()
 		local player = PlayerId()
 		if NetworkIsPlayerActive(player) then
             local playerPed = PlayerPedId()
-            if IsEntityDead(playerPed) and not InLaststand then
+            if IsEntityDead(playerPed) and not InLaststand and not InKnockedOut then
+                local thingy = false
+                for k, v in pairs(Config.KnockoutWeapons) do
+                    if GetPedCauseOfDeath(playerPed) == v then
+                        SetKnockedOut(true)
+                        thingy = true
+                        print(k, v)
+                    end
+                end
+                if thingy == false then
                 SetLaststand(true)
+                SetKnockedOut(false)
+                end
+            elseif IsEntityDead(playerPed) and InKnockedOut and not InLaststand then
+                SetLaststand(true)
+                SetKnockedOut(false)
             elseif IsEntityDead(playerPed) and InLaststand and not isDead then
                 SetLaststand(false)
+                SetKnockedOut(false)
                 local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)
                 local killer = GetPedSourceOfDeath(playerPed)
 
@@ -136,7 +151,7 @@ emsNotified = false
 CreateThread(function()
 	while true do
         sleep = 1000
-		if isDead or InLaststand then
+		if isDead or InLaststand or InKnockedOut then
             sleep = 5
             local ped = PlayerPedId()
             DisableAllControlActions(0)
@@ -150,6 +165,7 @@ CreateThread(function()
             EnableControlAction(0, 213, true)
             EnableControlAction(0, 249, true)
             EnableControlAction(0, 46, true)
+            SetPedCanBeTargetted(ped, false)
 
             if isDead then
                 if not isInHospitalBed then
@@ -224,7 +240,44 @@ CreateThread(function()
                         end
                     end
                 end
+            elseif InKnockedOut then
+                sleep = 5
+
+                if KnockedOutTime > KnockedOut.MinimumRevive then
+                    DrawTxt(0.94, 1.44, 1.0, 1.0, 0.6, "YOU WILL WAKE UP IN: ~r~" .. math.ceil(KnockedOutTime) .. "~w~ SECONDS", 255, 255, 255, 255)
+                else
+                    DrawTxt(0.845, 1.44, 1.0, 1.0, 0.6, "YOU WILL WAKE UP IN: ~r~" .. math.ceil(KnockedOutTime) .. "~w~ SECONDS, YOU CAN BE HELPED", 255, 255, 255, 255)
+                end
+
+                if not isEscorted then
+                    if IsPedInAnyVehicle(ped, false) then
+                        loadAnimDict("veh@low@front_ps@idle_duck")
+                        if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
+                            TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                        end
+                    else
+                        loadAnimDict(KnockedOutDict)
+                        if not IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
+                            TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                        end
+                    end
+                else
+                    if IsPedInAnyVehicle(ped, false) then
+                        loadAnimDict("veh@low@front_ps@idle_duck")
+                        if IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
+                            StopAnimTask(ped, "veh@low@front_ps@idle_duck", "sit", 3)
+                        end
+                    else
+                        loadAnimDict(KnockedOutDict)
+                        if IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
+                            StopAnimTask(ped, KnockedOutDict, KnockedOutAnim, 3)
+                        end
+                    end
+                end
             end
+        else
+            local ped = PlayerPedId()
+            SetPedCanBeTargetted(ped, true)
 		end
         Wait(sleep)
 	end
