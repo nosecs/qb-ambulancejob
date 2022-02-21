@@ -42,14 +42,15 @@ function SetLaststand(bool, spawn)
     local ped = PlayerPedId()
     if bool then
         Wait(1000)
-        local pos = GetEntityCoords(ped)
-        local heading = GetEntityHeading(ped)
 
         InLaststand = true
 
         while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
             Wait(10)
         end
+
+        local pos = GetEntityCoords(ped)
+        local heading = GetEntityHeading(ped)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "demo", 0.1)
 
