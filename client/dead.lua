@@ -103,6 +103,7 @@ CreateThread(function()
 		if NetworkIsPlayerActive(player) then
             local playerPed = PlayerPedId()
             if IsEntityDead(playerPed) and not InLaststand and not InKnockedOut then
+                print(GetPedCauseOfDeath(playerPed))
                 local KnockedByKnockoutWeapon = false
                 for k, v in pairs(Config.KnockoutWeapons) do
                     if GetPedCauseOfDeath(playerPed) == v then
@@ -115,9 +116,11 @@ CreateThread(function()
                 SetKnockedOut(false)
                 end
             elseif IsEntityDead(playerPed) and InKnockedOut and not InLaststand then
+                print(GetPedCauseOfDeath(playerPed))
                 SetLaststand(true)
                 SetKnockedOut(false)
             elseif IsEntityDead(playerPed) and InLaststand and not isDead then
+                print(GetPedCauseOfDeath(playerPed))
                 SetLaststand(false)
                 SetKnockedOut(false)
                 local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)

@@ -45,6 +45,8 @@ function SetKnockedOut(bool, spawn)
         local pos = GetEntityCoords(ped)
         local heading = GetEntityHeading(ped)
 
+        InKnockedOut = true
+
         while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
             Wait(10)
         end
@@ -65,7 +67,7 @@ function SetKnockedOut(bool, spawn)
             TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
         end
 
-        InKnockedOut = true
+        
 
 	TriggerServerEvent('hospital:server:ambulanceAlert', 'Civilian Down')
 
