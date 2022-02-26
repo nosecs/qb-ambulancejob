@@ -536,6 +536,17 @@ end
 
 -- Events
 
+RegisterNetEvent('hospital:client:npcHospital', function()
+    --print("Hello")
+    local bedId = GetAvailableBed()
+    print(bedId)
+    if bedId then
+        TriggerServerEvent("hospital:server:SendToBed", bedId, true)
+    else
+        QBCore.Functions.Notify(Lang:t('error.beds_taken'), "error")
+    end
+end)
+
 RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
     local street1, street2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
     local street1name = GetStreetNameFromHashKey(street1)
