@@ -103,6 +103,7 @@ CreateThread(function()
 		if NetworkIsPlayerActive(player) then
             local playerPed = PlayerPedId()
             if IsEntityDead(playerPed) and not InLaststand and not InKnockedOut then
+                print(GetPedCauseOfDeath(playerPed))
                 local KnockedByKnockoutWeapon = false
                 for k, v in pairs(Config.KnockoutWeapons) do
                     if GetPedCauseOfDeath(playerPed) == v then
@@ -115,9 +116,11 @@ CreateThread(function()
                 SetKnockedOut(false)
                 end
             elseif IsEntityDead(playerPed) and InKnockedOut and not InLaststand then
+                print(GetPedCauseOfDeath(playerPed))
                 SetLaststand(true)
                 SetKnockedOut(false)
             elseif IsEntityDead(playerPed) and InLaststand and not isDead then
+                print(GetPedCauseOfDeath(playerPed))
                 SetLaststand(false)
                 SetKnockedOut(false)
                 local killer_2, killerWeapon = NetworkGetEntityKillerOfPlayer(player)
@@ -164,7 +167,9 @@ CreateThread(function()
             EnableControlAction(0, 213, true)
             EnableControlAction(0, 249, true)
             EnableControlAction(0, 46, true)
-            SetPedCanBeTargetted(ped, false)
+            --SetPedCanBeTargetted(ped, false)
+            SetPedCanRagdoll(ped, false)
+            SetPedCanRagdollFromPlayerImpact(ped, false)
 
             if isDead then
                 if not isInHospitalBed then
@@ -276,7 +281,9 @@ CreateThread(function()
             end
         else
             local ped = PlayerPedId()
-            SetPedCanBeTargetted(ped, true)
+            SetPedCanRagdoll(ped, true)
+            SetPedCanRagdollFromPlayerImpact(ped, true)
+            --SetPedCanBeTargetted(ped, true)
 		end
         Wait(sleep)
 	end

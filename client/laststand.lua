@@ -42,12 +42,15 @@ function SetLaststand(bool, spawn)
     local ped = PlayerPedId()
     if bool then
         Wait(1000)
-        local pos = GetEntityCoords(ped)
-        local heading = GetEntityHeading(ped)
+
+        InLaststand = true
 
         while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
             Wait(10)
         end
+
+        local pos = GetEntityCoords(ped)
+        local heading = GetEntityHeading(ped)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "demo", 0.1)
 
@@ -77,8 +80,6 @@ function SetLaststand(bool, spawn)
             LoadAnimation(lastStandDict)
             TaskPlayAnim(ped, lastStandDict, lastStandAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
         end
-
-        InLaststand = true
 
         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
 
