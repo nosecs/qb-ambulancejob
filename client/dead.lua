@@ -167,7 +167,9 @@ CreateThread(function()
             EnableControlAction(0, 213, true)
             EnableControlAction(0, 249, true)
             EnableControlAction(0, 46, true)
-            SetPedCanBeTargetted(ped, false)
+            --SetPedCanBeTargetted(ped, false)
+            SetPedCanRagdoll(ped, false)
+            SetPedCanRagdollFromPlayerImpact(ped, false)
 
             if isDead then
                 if not isInHospitalBed then
@@ -279,7 +281,9 @@ CreateThread(function()
             end
         else
             local ped = PlayerPedId()
-            SetPedCanBeTargetted(ped, true)
+            SetPedCanRagdoll(ped, true)
+            SetPedCanRagdollFromPlayerImpact(ped, true)
+            --SetPedCanBeTargetted(ped, true)
 		end
         Wait(sleep)
 	end
