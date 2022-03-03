@@ -225,6 +225,252 @@ Config.LegInjuryChance = {
     Walking = 15
 }
 
+Config.DamageAnimations = {
+    ["melee@knife@streamed_core"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "melee_damage_front",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "non_melee_damage_left",
+            "melee_damage_left",
+        }
+    },
+    ["melee@knife@streamed_variations"] = {
+        anims = {"melee_damage_front_var_a"}
+    },
+    ["melee@large_wpn@streamed_core"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "melee_damage_front",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "non_melee_damage_left",
+            "melee_damage_left",
+        }
+    },
+    ["melee@large_wpn@streamed_core_fps"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "melee_damage_front",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "melee_damage_front_var_a",
+            "non_melee_damage_left",
+            "melee_damage_left",
+        }
+    },
+    ["melee@large_wpn@streamed_variations"] = {
+        anims = {
+            "melee_damage_front_var_a"
+        }
+    },
+    ["melee@pistol@streamed_core"] = {
+        anims = {
+            "non_melee_damage_left",
+            "non_melee_damage_front",
+            "non_melee_damage_back",
+            "non_melee_damage_right"
+        }
+    },
+    ["melee@pistol@streamed_fps"] = {
+        anims = {
+            "non_melee_damage_back",
+            "non_melee_damage_left",
+            "non_melee_damage_right",
+            "non_melee_damage_front"
+        }
+    },
+    ["melee@rifle@streamed_core"] = {
+        anims = {
+            "non_melee_damage_left",
+            "non_melee_damage_front",
+            "non_melee_damage_back",
+            "non_melee_damage_right"
+        }
+    },
+    ["melee@rifle@streamed_fps"] = {
+        anims = {
+            "non_melee_damage_back",
+            "non_melee_damage_left",
+            "non_melee_damage_right",
+            "non_melee_damage_front"
+        }
+    },
+    ["melee@small_wpn@streamed_core"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "melee_damage_front",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "non_melee_damage_left",
+            "melee_damage_left"
+        }
+    },
+    ["melee@small_wpn@streamed_core_fps"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "melee_damage_front",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "melee_damage_front_var_a",
+            "non_melee_damage_left",
+            "melee_damage_left",
+        }
+    },
+    ["melee@small_wpn@streamed_variations"] = {
+        anims = {
+            "melee_damage_front_var_a"
+        }
+    },
+    ["melee@unarmed@streamed_core"] = {
+        anims = {
+            "non_melee_damage_walk_right",
+            "non_melee_damage_front",
+            "melee_damage_legs_a",
+            "non_melee_damage_right",
+            "melee_damage_right",
+            "non_melee_damage_back",
+            "non_melee_damage_walk_left",
+            "melee_damage_legs_b",
+            "melee_damage_back",
+            "non_melee_damage_left",
+            "melee_damage_left"
+        }
+    },
+    ["melee@unarmed@streamed_core_fps"] = {
+        anims = {
+            "melee_damage_legs_a",
+            "non_melee_damage_walk_right",
+            "non_melee_damage_back",
+            "non_melee_damage_right",
+            "non_melee_damage_left",
+            "non_melee_damage_walk_left",
+            "non_melee_damage_front",
+            "melee_damage_right",
+            "melee_damage_back",
+            "melee_damage_legs_b",
+            "melee_damage_left"
+        }
+    },
+    ["melee@unarmed@streamed_taunts"] = {
+        anims = {
+            "damage_02",
+            "damage_03",
+            "damage_01",
+            "damage_04"
+        }
+    },
+    ["stungun@sitting"] = {
+        anims = {
+            "damage_vehicle"
+        }
+    },
+    ["stungun@standing"] = {
+        anims = {
+            "damage"
+        }
+    },--[[
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },]]
+}
+
 --[[
     MajorArmoredBleedChance : The % Chance Someone Gets A Bleed Effect Applied When Taking Major Damage With Armor
     MajorDoubleBleed : % Chance You Have To Receive Double Bleed Effect From Major Damage, This % is halved if the player has armor

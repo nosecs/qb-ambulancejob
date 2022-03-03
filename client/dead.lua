@@ -150,6 +150,22 @@ end)
 
 emsNotified = false
 
+CreateThread(function ()
+    while true do
+        if isDead or InLaststand or InKnockedOut then
+            local ped = PlayerPedId()
+            for k, v in pairs(Config.DamageAnimations) do
+                for kv, vv in pairs(v.anims) do
+                    if IsEntityPlayingAnim(ped, vv, k) then
+                        StopEntityAnim(ped, k, vv)
+                    end
+                end
+            end
+        end
+        Citizen.Wait(100)
+    end
+end)
+
 CreateThread(function()
 	while true do
         sleep = 1000
