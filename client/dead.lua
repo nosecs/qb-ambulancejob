@@ -197,18 +197,18 @@ CreateThread(function()
                     if IsPedInAnyVehicle(ped, false) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
-                            TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                            TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                         end
                     else
                         if isInHospitalBed then
                             if not IsEntityPlayingAnim(ped, inBedDict, inBedAnim, 3) then
                                 loadAnimDict(inBedDict)
-                                TaskPlayAnim(ped, inBedDict, inBedAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, inBedDict, inBedAnim, 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         else
                             if not IsEntityPlayingAnim(ped, deadAnimDict, deadAnim, 3) then
                                 loadAnimDict(deadAnimDict)
-                                TaskPlayAnim(ped, deadAnimDict, deadAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, deadAnimDict, deadAnim, 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         end
                     end
@@ -238,12 +238,12 @@ CreateThread(function()
                         if IsPedInAnyVehicle(ped, false) then
                             loadAnimDict("veh@low@front_ps@idle_duck")
                             if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
-                                TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         else
                             loadAnimDict(lastStandDict)
                             if not IsEntityPlayingAnim(ped, lastStandDict, lastStandAnim, 3) then
-                                TaskPlayAnim(ped, lastStandDict, lastStandAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, lastStandDict, lastStandAnim, 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         end
                     else
@@ -257,6 +257,18 @@ CreateThread(function()
                             if IsEntityPlayingAnim(ped, lastStandDict, lastStandAnim, 3) then
                                 StopAnimTask(ped, lastStandDict, lastStandAnim, 3)
                             end
+                        end
+                    end
+                elseif isEscorted then
+                    if IsPedInAnyVehicle(ped, false) then
+                        loadAnimDict("veh@low@front_ps@idle_duck")
+                        if IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
+                            StopAnimTask(ped, "veh@low@front_ps@idle_duck", "sit", 3)
+                        end
+                    else
+                        loadAnimDict(KnockedOutDict)
+                        if IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
+                            StopAnimTask(ped, KnockedOutDict, KnockedOutAnim, 3)
                         end
                     end
                 end
@@ -273,12 +285,12 @@ CreateThread(function()
                         if IsPedInAnyVehicle(ped, false) then
                             loadAnimDict("veh@low@front_ps@idle_duck")
                             if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
-                                TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         else
                             loadAnimDict(KnockedOutDict)
                             if not IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
-                                TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+                                TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 0.0, 0.0, -1, 1, 0, 0, 0, 0)
                             end
                         end
                     else
@@ -292,6 +304,18 @@ CreateThread(function()
                             if IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
                                 StopAnimTask(ped, KnockedOutDict, KnockedOutAnim, 3)
                             end
+                        end
+                    end
+                elseif isEscorted then
+                    if IsPedInAnyVehicle(ped, false) then
+                        loadAnimDict("veh@low@front_ps@idle_duck")
+                        if IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
+                            StopAnimTask(ped, "veh@low@front_ps@idle_duck", "sit", 3)
+                        end
+                    else
+                        loadAnimDict(KnockedOutDict)
+                        if IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
+                            StopAnimTask(ped, KnockedOutDict, KnockedOutAnim, 3)
                         end
                     end
                 end
