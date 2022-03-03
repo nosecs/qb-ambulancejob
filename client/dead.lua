@@ -196,12 +196,12 @@ CreateThread(function()
                     end
                 end
 
-                if IsPedInAnyVehicle(ped, false) then
+                if IsPedInAnyVehicle(ped, false) and not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                     loadAnimDict("veh@low@front_ps@idle_duck")
                     if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
                         TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
                     end
-                else
+                elseif not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                     if isInHospitalBed then
                         if not IsEntityPlayingAnim(ped, inBedDict, inBedAnim, 3) then
                             loadAnimDict(inBedDict)
@@ -236,24 +236,24 @@ CreateThread(function()
                 end
 
                 if not isEscorted then
-                    if IsPedInAnyVehicle(ped, false) then
+                    if IsPedInAnyVehicle(ped, false) and not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
                             TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
                         end
-                    else
+                    elseif not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict(lastStandDict)
                         if not IsEntityPlayingAnim(ped, lastStandDict, lastStandAnim, 3) then
                             TaskPlayAnim(ped, lastStandDict, lastStandAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
                         end
                     end
                 else
-                    if IsPedInAnyVehicle(ped, false) then
+                    if IsPedInAnyVehicle(ped, false) and not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
                             StopAnimTask(ped, "veh@low@front_ps@idle_duck", "sit", 3)
                         end
-                    else
+                    elseif not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict(lastStandDict)
                         if IsEntityPlayingAnim(ped, lastStandDict, lastStandAnim, 3) then
                             StopAnimTask(ped, lastStandDict, lastStandAnim, 3)
@@ -270,24 +270,24 @@ CreateThread(function()
                 end
 
                 if not isEscorted then
-                    if IsPedInAnyVehicle(ped, false) then
+                    if IsPedInAnyVehicle(ped, false) and not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
                             TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
                         end
-                    else
+                    elseif not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict(KnockedOutDict)
                         if not IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
                             TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
                         end
                     end
                 else
-                    if IsPedInAnyVehicle(ped, false) then
+                    if IsPedInAnyVehicle(ped, false) and not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
                             StopAnimTask(ped, "veh@low@front_ps@idle_duck", "sit", 3)
                         end
-                    else
+                    elseif not (GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped)) then
                         loadAnimDict(KnockedOutDict)
                         if IsEntityPlayingAnim(ped, KnockedOutDict, KnockedOutAnim, 3) then
                             StopAnimTask(ped, KnockedOutDict, KnockedOutAnim, 3)
