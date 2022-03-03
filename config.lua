@@ -400,7 +400,190 @@ Config.DamageAnimations = {
         anims = {
             "damage"
         }
+    },
+    ["get_up@directional@movement@from_knees@action"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_knees@injured"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_knees@panic"] = {
+        anims = {
+            "get_up_180",
+            "get_up_-180",
+            "get_up_0",
+            "get_up_-90",
+            "get_up_90"
+        }
+    },
+    ["get_up@directional@movement@from_knees@standard"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_seated@action"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_seated@drunk"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_seated@injured"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
+    },
+    ["get_up@directional@movement@from_seated@panic"] = {
+        anims = {
+            "get_up_180",
+            "get_up_-180",
+            "get_up_0",
+            "get_up_-90",
+            "get_up_90"
+        }
+    },
+    ["get_up@directional@movement@from_seated@standard"] = {
+        anims = {
+            "get_up_l_90",
+            "get_up_r_90",
+            "get_up_l_180",
+            "get_up_l_0",
+            "get_up_r_180",
+            "get_up_r_0"
+        }
+    },
+    ["get_up@first_person@directional@movement@from_knees@standard"] = {
+        anims = {
+            "getup_l_-180",
+            "v_25_levnumbers_loda",
+            "getup_l_-90",
+            "getup_r_180",
+            "getup_r_90",
+            "getup_l_0"
+        }
     },--[[
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
+    [""] = {
+        anims = {
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        }
+    },
     [""] = {
         anims = {
             "",
