@@ -184,8 +184,6 @@ CreateThread(function()
             EnableControlAction(0, 249, true)
             EnableControlAction(0, 46, true)
             --SetPedCanBeTargetted(ped, false)
-            SetPedCanRagdoll(ped, false)
-            SetPedCanRagdollFromPlayerImpact(ped, false)
 
             if isDead then
                 if not isInHospitalBed then
@@ -195,7 +193,7 @@ CreateThread(function()
                         DrawTxt(0.865, 1.44, 1.0, 1.0, 0.6, Lang:t('info.respawn_revive', {holdtime = hold, cost = Config.BillCost}), 255, 255, 255, 255)
                     end
                 end
-                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and not IsEntityInAir(ped) then
+                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and not GetEntityHeightAboveGround(ped) < 0.4 then
                     if IsPedInAnyVehicle(ped, false) then
                         loadAnimDict("veh@low@front_ps@idle_duck")
                         if not IsEntityPlayingAnim(ped, "veh@low@front_ps@idle_duck", "sit", 3) then
@@ -235,7 +233,7 @@ CreateThread(function()
                         emsNotified = true
                     end
                 end
-                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and IsEntityInAir(ped) then
+                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and GetEntityHeightAboveGround(ped) < 0.4 then
                     if not isEscorted then
                         if IsPedInAnyVehicle(ped, false) then
                             loadAnimDict("veh@low@front_ps@idle_duck")
@@ -270,7 +268,7 @@ CreateThread(function()
                 else
                     DrawTxt(0.845, 1.44, 1.0, 1.0, 0.6, "YOU WILL WAKE UP IN: ~r~" .. math.ceil(KnockedOutTime) .. "~w~ SECONDS, YOU CAN BE HELPED", 255, 255, 255, 255)
                 end
-                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and IsEntityInAir(ped) then
+                if GetEntitySpeed(ped) < 0.5 and not IsPedRagdoll(ped) and GetEntityHeightAboveGround(ped) < 0.4 then
                     if not isEscorted then
                         if IsPedInAnyVehicle(ped, false) then
                             loadAnimDict("veh@low@front_ps@idle_duck")
@@ -298,11 +296,6 @@ CreateThread(function()
                     end
                 end
             end
-        else
-            local ped = PlayerPedId()
-            SetPedCanRagdoll(ped, true)
-            SetPedCanRagdollFromPlayerImpact(ped, true)
-            --SetPedCanBeTargetted(ped, true)
 		end
         Wait(sleep)
 	end
