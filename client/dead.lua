@@ -19,9 +19,9 @@ function OnDeath()
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "demo", 0.1)
         local player = PlayerPedId()
 
-        while GetEntitySpeed(player) > 0.5 or IsPedRagdoll(player) do
+        --[[while GetEntitySpeed(player) > 0.5 or IsPedRagdoll(player) do
             Wait(10)
-        end
+        end]]
 
         if isDead then
             local pos = GetEntityCoords(player)
@@ -44,13 +44,13 @@ function OnDeath()
 			
             SetEntityInvincible(player, true)
             SetEntityHealth(player, GetEntityMaxHealth(player))
-            if IsPedInAnyVehicle(player, false) then
+            --[[if IsPedInAnyVehicle(player, false) then
                 loadAnimDict("veh@low@front_ps@idle_duck")
                 TaskPlayAnim(player, "veh@low@front_ps@idle_duck", "sit", 1.0, 1.0, -1, 1, 0, 0, 0, 0)
             else
                 loadAnimDict(deadAnimDict)
                 TaskPlayAnim(player, deadAnimDict, deadAnim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
-            end
+            end]]
             TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_died'))
         end
     end

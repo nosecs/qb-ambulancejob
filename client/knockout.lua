@@ -38,6 +38,17 @@ local function LoadAnimation(dict)
     end
 end
 
+local function Resurrect()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
+    while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
+        Wait(10)
+    end
+    NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
+    SetEntityHealth(ped, 150)
+end
+
 function SetKnockedOut(bool, spawn)
     local ped = PlayerPedId()
     if bool then
@@ -45,9 +56,9 @@ function SetKnockedOut(bool, spawn)
 
         InKnockedOut = true
 
-        while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
+        --[[while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
             Wait(10)
-        end
+        end]]
 
         local pos = GetEntityCoords(ped)
         local heading = GetEntityHeading(ped)
@@ -56,17 +67,16 @@ function SetKnockedOut(bool, spawn)
 
         KnockedOutTime = KnockedOut.ReviveInterval
 
-        NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
-        SetEntityHealth(ped, 150)
+        Resurrect()
         
 
-        if IsPedInAnyVehicle(ped, false) then
+        --[[if IsPedInAnyVehicle(ped, false) then
             LoadAnimation("veh@low@front_ps@idle_duck")
             TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 8.0, -1, 1, -1, false, false, false)
         else
             LoadAnimation(KnockedOutDict)
             TaskPlayAnim(ped, KnockedOutDict, KnockedOutAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
-        end
+        end]]
 
         
 

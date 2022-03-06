@@ -38,6 +38,30 @@ local function LoadAnimation(dict)
     end
 end
 
+local function Resurrect()
+    local ped = PlayerPedId()
+    local pos = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
+    while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
+        Wait(10)
+    end
+    if IsPedInAnyVehicle(ped) then
+        local veh = GetVehiclePedIsIn(ped)
+        local vehseats = GetVehicleModelNumberOfSeats(GetHashKey(GetEntityModel(veh)))
+        for i = -1, vehseats do
+            local occupant = GetPedInVehicleSeat(veh, i)
+            if occupant == ped then
+                NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
+                SetPedIntoVehicle(ped, veh, i)
+            end
+        end
+    else
+        NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
+    end
+
+    SetEntityHealth(ped, 150)
+end
+
 function SetLaststand(bool, spawn)
     local ped = PlayerPedId()
     if bool then
@@ -45,18 +69,18 @@ function SetLaststand(bool, spawn)
 
         InLaststand = true
 
-        while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
+        --[[while GetEntitySpeed(ped) > 0.5 or IsPedRagdoll(ped) do
             Wait(10)
-        end
+        end]]
 
-        local pos = GetEntityCoords(ped)
-        local heading = GetEntityHeading(ped)
+        
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "demo", 0.1)
 
         LaststandTime = Laststand.ReviveInterval
 
-        local ped = PlayerPedId()
+        Resurrect()
+        --[[local ped = PlayerPedId()
         if IsPedInAnyVehicle(ped) then
             local veh = GetVehiclePedIsIn(ped)
             local vehseats = GetVehicleModelNumberOfSeats(GetHashKey(GetEntityModel(veh)))
@@ -71,15 +95,15 @@ function SetLaststand(bool, spawn)
             NetworkResurrectLocalPlayer(pos.x, pos.y, pos.z + 0.5, heading, true, false)
         end		
 		
-        SetEntityHealth(ped, 150)
+        SetEntityHealth(ped, 150)]]
 
-        if IsPedInAnyVehicle(ped, false) then
+        --[[if IsPedInAnyVehicle(ped, false) then
             LoadAnimation("veh@low@front_ps@idle_duck")
             TaskPlayAnim(ped, "veh@low@front_ps@idle_duck", "sit", 1.0, 8.0, -1, 1, -1, false, false, false)
         else
             LoadAnimation(lastStandDict)
             TaskPlayAnim(ped, lastStandDict, lastStandAnim, 1.0, 8.0, -1, 1, -1, false, false, false)
-        end
+        end]]
 
         TriggerServerEvent('hospital:server:ambulanceAlert', Lang:t('info.civ_down'))
 
